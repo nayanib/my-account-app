@@ -1,13 +1,19 @@
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { Button, StyleSheet, Text, View } from 'react-native';
+import { Alert, Button, StyleSheet, Text, View } from 'react-native';
 
 export default function ReviewScreen() {
   const router = useRouter(); // 'useRouter' is used to navigate between screens
 
   // Extract parameters passed from the previous screen
-  const { userName, email, phoneNumber } = useLocalSearchParams(); // 'useLocalSearchParams' is used to retrieve parameters passed from the previous screen
+  const { userName, email, phoneNumber, age } = useLocalSearchParams(); // 'useLocalSearchParams' is used to retrieve parameters passed from the previous screen
 
   const handleConfirm = () => {
+    // if the user is under 18, show an alert and do not go to the next screen
+    if (age < 18) {
+      Alert.alert('Warning', 'You must be 18 to proceed.');
+      return;
+    }
+
     router.push({
       pathname: '/success',
       params: { userName },
@@ -22,6 +28,7 @@ export default function ReviewScreen() {
         <Text style={styles.detail}>Username: {userName}</Text>
         <Text style={styles.detail}>Email: {email}</Text>
         <Text style={styles.detail}>Phone: {phoneNumber || 'Not provided'}</Text>
+        <Text style={styles.detail}>Age: {age}</Text>
       </View>
 
       <View style={styles.buttonContainer}>

@@ -9,11 +9,12 @@ export default function RegistrationScreen() {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [yearOfBirth, setYearOfBirth] = useState('');
 
   // handleReview function checks if all fields are filled and if passwords match before navigating to the Review screen. It uses Alert to show error messages if validation fails.
   // 'alert' is a built-in React Native component that displays an alert dialog with a message and optional buttons. In this case, it is used to show error messages when validation fails.
   const handleReview = () => {
-    if (!userName || !email || !phoneNumber || !password || !confirmPassword) {
+    if (!userName || !email || !phoneNumber || !password || !confirmPassword || !yearOfBirth) {
       Alert.alert('Error', 'Please fill in all fields.');
       return;
     }
@@ -23,9 +24,13 @@ export default function RegistrationScreen() {
       return;
     }
 
+    // calculate the age using the current year
+    const currentYear = new Date().getFullYear();
+    const age = currentYear - parseInt(yearOfBirth);
+
     router.push({
       pathname: '/review', // 'pathname' specifies the path of the screen to navigate to. In this case, it navigates to the 'Review' screen.
-      params: { userName, email, phoneNumber }, // 'params' is an object that contains the data to be passed to the next screen. In this case, it passes the user's name, email, and phone number to the 'Review' screen.
+      params: { userName, email, phoneNumber, age }, // 'params' is an object that contains the data to be passed to the next screen. In this case, it passes the user's name, email, and phone number to the 'Review' screen.
     });
   };
 
@@ -43,6 +48,7 @@ export default function RegistrationScreen() {
       <TextInput style={styles.input} placeholder="Phone Number" keyboardType="phone-pad" value={phoneNumber} onChangeText={setPhoneNumber} />
       <TextInput style={styles.input} placeholder="Password" secureTextEntry value={password} onChangeText={setPassword} />
       <TextInput style={styles.input} placeholder="Confirm Password" secureTextEntry value={confirmPassword} onChangeText={setConfirmPassword} />
+      <TextInput style={styles.input} placeholder="Year of Birth" keyboardType="numeric" value={yearOfBirth} onChangeText={setYearOfBirth} />
 
       <Button title="Review Details" onPress={handleReview} />
     </View>
